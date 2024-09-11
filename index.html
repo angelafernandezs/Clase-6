@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="utf-8" />
+        <title>👦🏻👦🏼👦🏽👦🏾👦🏿 fetch()</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <header>
+            <h1>JavaScript a secas</h1>
+            <h2></h2>
+            <select>
+                <option value="todos">todos</option>
+                <option value="acuario">acuario 20 de Enero al 18 de Febrero</option>
+                <option value="piscis">piscis 19 de Febrero al 20 de Marzo</option>
+                <option value="aries">aries 21 de Marzo al 19 de Abril</option>
+                <option value="tauro">tauro 20 de Abril al 20 de Mayo</option>
+                <option value="geminis">géminis 21 de mayo al 20 de junio</option>
+                <option value="cancer">cáncer 21 de junio al 22 de julio</option>
+                <option value="leo">leo 23 de Julio al 22 de Agosto</option>
+                <option value="virgo">virgo 23 de Agosto al 22 de Septiembre</option>
+                <option value="libra">libra 23 de Septiembre al 22 de Octubre</option>
+                <option value="escorpio">escorpio 23 de Octubre al 21 de Noviembre</option>
+                <option value="">sagitario 22 de Noviembre al 21 de Diciembre</option>
+                <option value="capricornio">capricornio 22 de Diciembre al 19 de Enero</option>
+            </select>
+        </header>
+
+        <main></main>
+
+        <script>
+            //unas variables que no varían, que son constantes:
+
+            const autoria = document.querySelector("h2");
+
+            const principal = document.querySelector("main");
+
+            const seleccion = document.querySelector("select");
+
+            const nombre = "Angela Fernández";
+
+            //noten que hoy uso `` y ${}, en lugar de comillas y concatenaciones
+
+            autoria.innerHTML = `Por ${nombre}`;
+
+            //acá voy por el JSON
+
+            async function astros() {
+                const consulta = await fetch("https://raw.githubusercontent.com/profesorfaco/dno096-2024/main/clase-05/datos.json");
+                const data = await consulta.json();
+                console.log(data);
+
+                data.forEach((d) => principal.innerHTML += `<div class="${d.signo}"><img src="${d.foto}" title="${d.fecha}"><p><a href="${d.github}" target="_blank">${d.nombre}</a></p>`);
+
+                seleccionables();
+            }
+
+            astros().catch((error) => console.error(error));
+
+            //lo que sigue es una función que ejecuto dentro de astros()
+
+            var valor;
+
+            function seleccionables() {
+                seleccion.addEventListener("change", (e) => {
+                    document.querySelectorAll("div").forEach((t) => t.classList.add("esconde"));
+                    valor = e.target.value;
+                    if (valor !== "todos") {
+                        document.querySelectorAll(`.${valor}`).forEach((t) => t.classList.remove("esconde"));
+                    } else {
+                        document.querySelectorAll("div").forEach((t) => t.classList.remove("esconde"));
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>
